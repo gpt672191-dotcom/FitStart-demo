@@ -1,4 +1,4 @@
-// เริ่มต้นแอป และสลับภาษา (Start-up and language switch) — shared by index.html and profile.html
+// เริ่มต้นแอป และสลับภาษา (Start-up and language switch) and page routing (home / #profile)
 
 /* ---------- Home page BMI tool: start from the logged-in user's latest profile entry ---------- */
 function prefillBMI() {
@@ -18,9 +18,24 @@ function applyLang() {
   if ($("#planForm")) { renderChips(); renderPlan(); }
   if ($("#bmiOut")) { prefillBMI(); drawTimer(); }
   renderAuth(); renderAccount();
+  if ($("#profileView")) document.title = isProfileRoute() ? `${t.profileTitle} · FitStart AI` : "FitStart AI";
 }
 $$(".lang button").forEach(b => b.onclick = () => { lang = b.dataset.lang; store.set("fs-lang", lang); applyLang(); });
 
+/* ---------- Views: home and profile live in one file so they always share the login ----------
+   index.html#profile → profile view, anything else → home view (and scroll to that section) */
+const isProfileRoute = () => location.hash === "#profile";
+function route() {
+  const prof = isProfileRoute();
+  $("#homeView").hidden = prof;
+  $("#profileView").hidden = !prof;
+  document.title = prof ? `${T[lang].profileTitle} · FitStart AI` : "FitStart AI";
+  if (prof) { window.scrollTo(0, 0); return; }
+  prefillBMI(); // pick up anything just saved on the profile
+  const target = location.hash.length > 1 && document.getElementById(location.hash.slice(1));
+  if (target) target.scrollIntoView(); else if (!location.hash || location.hash === "#") window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", route);
+
 applyLang();
-// Sections like #myplans are hidden until the account renders, so jump to the hash afterwards
-if (location.hash && $(location.hash)) $(location.hash).scrollIntoView();
+route();

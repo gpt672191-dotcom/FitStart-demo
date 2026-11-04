@@ -3,7 +3,7 @@
 /* Stored on the user record (DEMO: this browser only):
    u.body = [{ h, w, at }]   newest first; one entry per day (saving again the same day replaces it) */
 
-// Runs on profile.html only. bodyLog() lives in bmi.js.
+// Profile view (index.html#profile). bodyLog() lives in bmi.js.
 const sameDay = (a, b) => new Date(a).toDateString() === new Date(b).toDateString();
 
 function renderProfileBMI() {

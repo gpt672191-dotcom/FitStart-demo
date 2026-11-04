@@ -112,7 +112,7 @@ function renderAccount() {
     $("#whoEmail").textContent = u.email;
   }
   renderSaved();
-  if (typeof renderProfile === "function") renderProfile();   // profile.html
+  if (typeof renderProfile === "function") renderProfile();   // profile view
   if (typeof prefillBMI === "function") prefillBMI();         // index.html BMI tool
 }
 
