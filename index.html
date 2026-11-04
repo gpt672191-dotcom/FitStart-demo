@@ -1,279 +1,264 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FitStart — เริ่มออกกำลังกายแบบมือใหม่</title>
-  <meta name="description" content="FitStart คู่มือออกกำลังกายสำหรับมือใหม่ เริ่มง่าย ทำได้จริง ที่บ้านหรือที่ยิม">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800&family=Sarabun:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitStart AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- Navbar -->
-  <header class="nav" id="nav">
-    <div class="container nav__inner">
-      <a href="#" class="logo">Fit<span>Start</span></a>
-      <nav class="nav__links" id="navLinks">
-        <a href="#why">ทำไมต้อง FitStart</a>
-        <a href="#programs">โปรแกรม</a>
-        <a href="#plan">ตารางสัปดาห์แรก</a>
-        <a href="#tips">เคล็ดลับ</a>
-        <a href="#faq">คำถามที่พบบ่อย</a>
-        <a href="#signup" class="btn btn--sm">เริ่มเลย</a>
-      </nav>
-      <button class="nav__toggle" id="navToggle" aria-label="เปิดเมนู">
-        <span></span><span></span><span></span>
-      </button>
+<header>
+  <div class="wrap nav">
+    <a href="#" class="logo"><span class="logo-mark">FS</span> FitStart AI</a>
+    <nav class="nav-links">
+      <a href="#how" data-i18n="navHow"></a>
+      <a href="#planner" data-i18n="navPlan"></a>
+      <a href="#tools" data-i18n="navTools"></a>
+      <a href="#tips" data-i18n="navTips"></a>
+    </nav>
+    <div class="nav-right">
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="th">TH</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+      <button type="button" class="btn sm" id="loginBtn" data-i18n="login"></button>
+      <div class="user-menu" id="userMenu" hidden>
+        <button type="button" class="user-btn" id="userBtn" aria-haspopup="true">
+          <span class="avatar" id="avatar"></span><span class="uname" id="uname"></span>
+        </button>
+        <div class="dropdown" id="dropdown" hidden>
+          <div class="who" id="whoEmail"></div>
+          <a href="#myplans" id="ddPlans" data-i18n="myPlans"></a>
+          <button type="button" id="logoutBtn" data-i18n="logout"></button>
+        </div>
+      </div>
     </div>
-  </header>
+  </div>
+</header>
 
+<!-- Login / Sign-up modal -->
+<div class="modal-bg" id="authModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <button type="button" class="close" id="authClose" aria-label="Close">✕</button>
+    <h2 id="authTitle" style="margin:0 0 4px;font-size:1.35rem"></h2>
+    <p id="authSub" style="margin:0;color:var(--muted);font-size:.92rem"></p>
+    <div class="tabs">
+      <button type="button" data-tab="login" data-i18n="login"></button>
+      <button type="button" data-tab="signup" data-i18n="signup"></button>
+    </div>
+    <form id="authForm" novalidate>
+      <div class="field" id="nameField">
+        <label for="aName" data-i18n="name"></label>
+        <input id="aName" type="text" autocomplete="name" maxlength="40">
+      </div>
+      <div class="field">
+        <label for="aEmail" data-i18n="email"></label>
+        <input id="aEmail" type="email" autocomplete="email" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label for="aPw" data-i18n="password"></label>
+        <div class="pw-wrap">
+          <input id="aPw" type="password" autocomplete="current-password">
+          <button type="button" class="pw-toggle" data-for="aPw" data-i18n="show"></button>
+        </div>
+      </div>
+      <div class="field" id="pw2Field">
+        <label for="aPw2" data-i18n="confirmPw"></label>
+        <div class="pw-wrap">
+          <input id="aPw2" type="password" autocomplete="new-password">
+          <button type="button" class="pw-toggle" data-for="aPw2" data-i18n="show"></button>
+        </div>
+      </div>
+      <div class="form-err" id="authErr" role="alert"></div>
+      <button type="submit" class="btn" id="authSubmit"></button>
+    </form>
+    <div class="switch-line"><span id="switchText"></span> <button type="button" id="switchBtn"></button></div>
+    <div class="demo-note">🧪 <span data-i18n="demoNote"></span></div>
+  </div>
+</div>
+
+<main>
   <!-- Hero -->
-  <section class="hero">
-    <div class="container hero__inner">
-      <div class="hero__text reveal">
-        <span class="badge">สำหรับมือใหม่ 100%</span>
-        <h1>เริ่มออกกำลังกาย<br><span class="highlight">วันละ 20 นาที</span><br>ก็เปลี่ยนได้</h1>
-        <p>ไม่ต้องมีอุปกรณ์ ไม่ต้องเก่งมาก่อน FitStart พาคุณเริ่มทีละก้าว ด้วยท่าง่าย ๆ ตารางที่ทำตามได้จริง และเคล็ดลับที่ช่วยให้ไม่ล้มเลิกกลางทาง</p>
-        <div class="hero__cta">
-          <a href="#signup" class="btn">เริ่มต้นฟรี</a>
-          <a href="#programs" class="btn btn--ghost">ดูโปรแกรม</a>
-        </div>
-        <div class="hero__stats">
-          <div><strong data-count="12000">0</strong><span>สมาชิกมือใหม่</span></div>
-          <div><strong data-count="45">0</strong><span>ท่าพื้นฐาน</span></div>
-          <div><strong data-count="20">0</strong><span>นาที / วัน</span></div>
-        </div>
+  <div class="wrap hero">
+    <div>
+      <span class="pill" data-i18n="heroPill"></span>
+      <h1 data-i18n-html="heroTitle"></h1>
+      <p class="lead" data-i18n="heroLead"></p>
+      <div class="btn-row">
+        <a href="#planner" class="btn" data-i18n="heroCta"></a>
+        <a href="#how" class="btn ghost" data-i18n="heroCta2"></a>
       </div>
-      <div class="hero__visual reveal">
-        <div class="ring ring--1"></div>
-        <div class="ring ring--2"></div>
-        <div class="hero__card">
-          <div class="hero__card-head">
-            <span>วันนี้</span>
-            <span class="pill">วันที่ 3</span>
-          </div>
-          <h3>Full Body เบา ๆ</h3>
-          <ul class="checklist" id="todayList">
-            <li><label><input type="checkbox"> วอร์มอัพ 3 นาที</label></li>
-            <li><label><input type="checkbox"> สควอท 3 × 10</label></li>
-            <li><label><input type="checkbox"> วิดพื้นแบบคุกเข่า 3 × 8</label></li>
-            <li><label><input type="checkbox"> แพลงก์ 3 × 20 วิ</label></li>
-            <li><label><input type="checkbox"> ยืดเหยียด 5 นาที</label></li>
-          </ul>
-          <div class="progress"><div class="progress__bar" id="todayBar"></div></div>
-          <p class="progress__label" id="todayLabel">สำเร็จ 0 / 5</p>
-        </div>
+    </div>
+    <div class="hero-card" aria-hidden="true">
+      <div class="mini-plan">
+        <div><span data-i18n="miniD1"></span><span data-i18n="mini20"></span></div>
+        <div><span data-i18n="miniD2"></span><span data-i18n="mini15"></span></div>
+        <div><span data-i18n="miniD3"></span><span data-i18n="mini25"></span></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><b>40+</b><span data-i18n="statEx"></span></div>
+        <div class="stat"><b>0฿</b><span data-i18n="statFree"></span></div>
+        <div class="stat"><b>1 min</b><span data-i18n="statFast"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <section id="how">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 data-i18n="howTitle"></h2>
+        <p data-i18n="howSub"></p>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="num">1</div><h3 data-i18n="s1t"></h3><p data-i18n="s1d"></p></div>
+        <div class="step"><div class="num">2</div><h3 data-i18n="s2t"></h3><p data-i18n="s2d"></p></div>
+        <div class="step"><div class="num">3</div><h3 data-i18n="s3t"></h3><p data-i18n="s3d"></p></div>
       </div>
     </div>
   </section>
 
-  <!-- Why -->
-  <section class="section" id="why">
-    <div class="container">
-      <div class="section__head reveal">
-        <span class="eyebrow">ทำไมต้อง FitStart</span>
-        <h2>ออกแบบมาเพื่อคนที่ไม่เคยออกกำลังกาย</h2>
+  <!-- Planner -->
+  <section id="planner">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 data-i18n="planTitle"></h2>
+        <p data-i18n="planSub"></p>
       </div>
-      <div class="features">
-        <article class="feature reveal">
-          <div class="feature__icon">🌱</div>
-          <h3>เริ่มจากศูนย์</h3>
-          <p>ทุกท่ามีคำอธิบายทีละขั้น พร้อมท่าทางเลือกที่ง่ายกว่าเมื่อยังทำไม่ไหว</p>
-        </article>
-        <article class="feature reveal">
-          <div class="feature__icon">🏠</div>
-          <h3>ทำที่บ้านได้</h3>
-          <p>ใช้แค่น้ำหนักตัวและพื้นที่ 2 × 2 เมตร ไม่ต้องสมัครยิมก็เริ่มได้วันนี้</p>
-        </article>
-        <article class="feature reveal">
-          <div class="feature__icon">⏱️</div>
-          <h3>สั้นแต่ได้ผล</h3>
-          <p>โปรแกรมละ 15–30 นาที เหมาะกับคนทำงานที่มีเวลาน้อย</p>
-        </article>
-        <article class="feature reveal">
-          <div class="feature__icon">📈</div>
-          <h3>ค่อย ๆ เพิ่มระดับ</h3>
-          <p>เพิ่มความหนักทีละน้อยทุกสัปดาห์ ลดโอกาสบาดเจ็บและเห็นพัฒนาการชัด</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- Programs -->
-  <section class="section section--tint" id="programs">
-    <div class="container">
-      <div class="section__head reveal">
-        <span class="eyebrow">โปรแกรมแนะนำ</span>
-        <h2>เลือกเป้าหมายของคุณ</h2>
-      </div>
-      <div class="tabs reveal" role="tablist">
-        <button class="tab active" data-filter="all">ทั้งหมด</button>
-        <button class="tab" data-filter="cardio">คาร์ดิโอ</button>
-        <button class="tab" data-filter="strength">เสริมกล้ามเนื้อ</button>
-        <button class="tab" data-filter="flex">ยืดหยุ่น</button>
-      </div>
-      <div class="programs">
-        <article class="program reveal" data-cat="cardio">
-          <div class="program__top program__top--a">🚶</div>
-          <div class="program__body">
-            <span class="level">ง่าย</span>
-            <h3>เดินเร็วเผาผลาญ</h3>
-            <p>เดินเร็วสลับเดินช้า ช่วยให้หัวใจแข็งแรงและเริ่มสร้างนิสัย</p>
-            <div class="meta"><span>⏱ 20 นาที</span><span>🔥 ~120 kcal</span></div>
+      <div class="panel">
+        <form id="planForm">
+          <div class="form-grid">
+            <div class="q">
+              <div class="q-label" data-i18n="qGoal"></div>
+              <div class="chips" data-group="goal"></div>
+            </div>
+            <div class="q">
+              <div class="q-label" data-i18n="qLevel"></div>
+              <div class="chips" data-group="level"></div>
+            </div>
+            <div class="q">
+              <div class="q-label" data-i18n="qDays"></div>
+              <div class="chips" data-group="days"></div>
+            </div>
+            <div class="q">
+              <div class="q-label" data-i18n="qTime"></div>
+              <div class="chips" data-group="time"></div>
+            </div>
+            <div class="q">
+              <div class="q-label" data-i18n="qEquip"></div>
+              <div class="chips" data-group="equip"></div>
+            </div>
+            <div class="q">
+              <div class="q-label" data-i18n="qImpact"></div>
+              <div class="chips" data-group="impact"></div>
+            </div>
           </div>
-        </article>
-        <article class="program reveal" data-cat="strength">
-          <div class="program__top program__top--b">💪</div>
-          <div class="program__body">
-            <span class="level">ง่าย</span>
-            <h3>Full Body น้ำหนักตัว</h3>
-            <p>สควอท วิดพื้น แพลงก์ ครบทุกส่วนในเซ็ตเดียว</p>
-            <div class="meta"><span>⏱ 25 นาที</span><span>🔥 ~150 kcal</span></div>
-          </div>
-        </article>
-        <article class="program reveal" data-cat="flex">
-          <div class="program__top program__top--c">🧘</div>
-          <div class="program__body">
-            <span class="level">ง่ายมาก</span>
-            <h3>ยืดเหยียดตอนเช้า</h3>
-            <p>คลายกล้ามเนื้อหลัง คอ บ่า เหมาะกับคนนั่งทำงานนาน</p>
-            <div class="meta"><span>⏱ 15 นาที</span><span>🔥 ~50 kcal</span></div>
-          </div>
-        </article>
-        <article class="program reveal" data-cat="cardio">
-          <div class="program__top program__top--d">⚡</div>
-          <div class="program__body">
-            <span class="level">ปานกลาง</span>
-            <h3>HIIT มือใหม่</h3>
-            <p>ทำหนัก 20 วิ พัก 40 วิ ช่วยเพิ่มความฟิตในเวลาสั้น</p>
-            <div class="meta"><span>⏱ 15 นาที</span><span>🔥 ~140 kcal</span></div>
-          </div>
-        </article>
-        <article class="program reveal" data-cat="strength">
-          <div class="program__top program__top--e">🍑</div>
-          <div class="program__body">
-            <span class="level">ง่าย</span>
-            <h3>ขาและสะโพก</h3>
-            <p>ลันจ์ กลูตบริดจ์ สควอท ปั้นช่วงล่างให้แข็งแรง</p>
-            <div class="meta"><span>⏱ 20 นาที</span><span>🔥 ~110 kcal</span></div>
-          </div>
-        </article>
-        <article class="program reveal" data-cat="flex">
-          <div class="program__top program__top--f">🌙</div>
-          <div class="program__body">
-            <span class="level">ง่ายมาก</span>
-            <h3>โยคะก่อนนอน</h3>
-            <p>ท่าผ่อนคลายช่วยให้หลับลึกขึ้นและลดความเครียด</p>
-            <div class="meta"><span>⏱ 15 นาที</span><span>🔥 ~40 kcal</span></div>
-          </div>
-        </article>
+          <button type="submit" class="btn" data-i18n="generate"></button>
+        </form>
+        <div id="plan" aria-live="polite"></div>
       </div>
     </div>
   </section>
 
-  <!-- Weekly plan -->
-  <section class="section" id="plan">
-    <div class="container">
-      <div class="section__head reveal">
-        <span class="eyebrow">ตารางสัปดาห์แรก</span>
-        <h2>7 วันแรก ทำตามได้เลย</h2>
-        <p>คลิกที่แต่ละวันเพื่อดูรายละเอียด</p>
+  <!-- My plans (logged-in only) -->
+  <section id="myplans" hidden>
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 data-i18n="myPlans"></h2>
+        <p data-i18n="myPlansSub"></p>
       </div>
-      <div class="week reveal" id="week"></div>
-      <div class="day-detail reveal" id="dayDetail"></div>
+      <div class="saved-list" id="savedList"></div>
+    </div>
+  </section>
+
+  <!-- Tools -->
+  <section id="tools">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 data-i18n="toolsTitle"></h2>
+        <p data-i18n="toolsSub"></p>
+      </div>
+      <div class="tools">
+        <div class="panel tool">
+          <h3 data-i18n="bmiTitle"></h3>
+          <p data-i18n="bmiSub"></p>
+          <div class="field-row">
+            <div class="field">
+              <label for="h" data-i18n="height"></label>
+              <input id="h" type="number" inputmode="decimal" min="100" max="230" placeholder="165">
+            </div>
+            <div class="field">
+              <label for="w" data-i18n="weight"></label>
+              <input id="w" type="number" inputmode="decimal" min="25" max="250" placeholder="60">
+            </div>
+          </div>
+          <div class="bmi-out" id="bmiOut"></div>
+        </div>
+
+        <div class="panel tool">
+          <h3 data-i18n="timerTitle"></h3>
+          <p data-i18n="timerSub"></p>
+          <div class="center" id="presets">
+            <button type="button" class="btn ghost" data-sec="30">30s</button>
+            <button type="button" class="btn ghost" data-sec="60">60s</button>
+            <button type="button" class="btn ghost" data-sec="90">90s</button>
+          </div>
+          <div class="timer-display" id="tDisplay">01:00</div>
+          <div class="timer-ring"><div id="tBar"></div></div>
+          <div class="center">
+            <button type="button" class="btn" id="tStart" data-i18n="start"></button>
+            <button type="button" class="btn ghost" id="tReset" data-i18n="reset"></button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Tips -->
-  <section class="section section--dark" id="tips">
-    <div class="container">
-      <div class="section__head reveal">
-        <span class="eyebrow eyebrow--light">เคล็ดลับมือใหม่</span>
-        <h2>5 ข้อที่ช่วยให้ไม่ล้มเลิก</h2>
+  <section id="tips">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 data-i18n="tipsTitle"></h2>
+        <p data-i18n="tipsSub"></p>
       </div>
-      <ol class="tips">
-        <li class="reveal"><span>01</span><div><h3>เริ่มน้อยกว่าที่คิดว่าไหว</h3><p>ทำแค่ 10–15 นาทีในสัปดาห์แรก ความสม่ำเสมอสำคัญกว่าความหนัก</p></div></li>
-        <li class="reveal"><span>02</span><div><h3>วอร์มอัพและคูลดาวน์ทุกครั้ง</h3><p>ใช้ 3–5 นาทีเตรียมร่างกาย ลดการบาดเจ็บได้มาก</p></div></li>
-        <li class="reveal"><span>03</span><div><h3>ฟอร์มถูกต้องก่อนจำนวนครั้ง</h3><p>ทำช้าและถูกท่า ดีกว่าทำเร็วแต่ผิดท่า</p></div></li>
-        <li class="reveal"><span>04</span><div><h3>พักให้พอ</h3><p>กล้ามเนื้อเติบโตตอนพัก นอนให้ได้ 7–8 ชั่วโมงและมีวันพักในสัปดาห์</p></div></li>
-        <li class="reveal"><span>05</span><div><h3>จดบันทึกความก้าวหน้า</h3><p>เห็นพัฒนาการตัวเองทุกสัปดาห์ คือแรงจูงใจที่ดีที่สุด</p></div></li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- Testimonials -->
-  <section class="section">
-    <div class="container">
-      <div class="section__head reveal">
-        <span class="eyebrow">เสียงจากมือใหม่</span>
-        <h2>เริ่มต้นแบบนี้ก็ได้</h2>
-      </div>
-      <div class="slider reveal">
-        <div class="slider__track" id="sliderTrack">
-          <blockquote class="quote">
-            <p>“ไม่เคยออกกำลังกายเลย แต่ตารางทำตามง่ายมาก ตอนนี้ทำต่อเนื่องมา 2 เดือนแล้ว”</p>
-            <footer><span class="avatar">A</span> ตัวอย่างผู้ใช้ · พนักงานออฟฟิศ</footer>
-          </blockquote>
-          <blockquote class="quote">
-            <p>“ชอบที่มีท่าทางเลือกแบบง่าย วิดพื้นไม่ได้สักครั้งตอนแรก ตอนนี้ทำได้ 10 ครั้งแล้ว”</p>
-            <footer><span class="avatar">B</span> ตัวอย่างผู้ใช้ · นักศึกษา</footer>
-          </blockquote>
-          <blockquote class="quote">
-            <p>“แค่วันละ 20 นาทีก่อนเข้างาน รู้สึกสดชื่นขึ้นและปวดหลังน้อยลง”</p>
-            <footer><span class="avatar">C</span> ตัวอย่างผู้ใช้ · ฟรีแลนซ์</footer>
-          </blockquote>
-        </div>
-        <div class="slider__dots" id="sliderDots"></div>
+      <div class="tips">
+        <div class="tip"><div class="ico">🐢</div><h3 data-i18n="t1t"></h3><p data-i18n="t1d"></p></div>
+        <div class="tip"><div class="ico">💧</div><h3 data-i18n="t2t"></h3><p data-i18n="t2d"></p></div>
+        <div class="tip"><div class="ico">😴</div><h3 data-i18n="t3t"></h3><p data-i18n="t3d"></p></div>
+        <div class="tip"><div class="ico">📈</div><h3 data-i18n="t4t"></h3><p data-i18n="t4d"></p></div>
       </div>
     </div>
   </section>
 
   <!-- FAQ -->
-  <section class="section section--tint" id="faq">
-    <div class="container container--narrow">
-      <div class="section__head reveal">
-        <span class="eyebrow">คำถามที่พบบ่อย</span>
-        <h2>สงสัยอะไร ถามได้</h2>
-      </div>
-      <div class="faq">
-        <details class="reveal"><summary>ควรออกกำลังกายสัปดาห์ละกี่วัน?</summary><p>สำหรับมือใหม่ แนะนำ 3–4 วันต่อสัปดาห์ สลับกับวันพักหรือเดินเบา ๆ</p></details>
-        <details class="reveal"><summary>ต้องซื้ออุปกรณ์อะไรบ้าง?</summary><p>ไม่จำเป็น เริ่มด้วยน้ำหนักตัวได้เลย ถ้ามีเสื่อโยคะจะช่วยให้สบายขึ้น</p></details>
-        <details class="reveal"><summary>ปวดกล้ามเนื้อหลังออกกำลังกาย ปกติไหม?</summary><p>อาการปวดเมื่อยแบบตึง ๆ 1–3 วันถือเป็นเรื่องปกติ แต่ถ้าเจ็บแปลบหรือบวม ควรหยุดและปรึกษาแพทย์</p></details>
-        <details class="reveal"><summary>ออกกำลังกายตอนไหนดีที่สุด?</summary><p>ช่วงเวลาที่คุณทำได้สม่ำเสมอคือช่วงที่ดีที่สุด จะเช้าหรือเย็นก็ได้</p></details>
-        <details class="reveal"><summary>มีโรคประจำตัว เริ่มได้ไหม?</summary><p>ควรปรึกษาแพทย์ก่อนเริ่มโปรแกรมใด ๆ เพื่อความปลอดภัย</p></details>
-      </div>
+  <section id="faq">
+    <div class="wrap faq">
+      <div class="sec-head"><h2 data-i18n="faqTitle"></h2></div>
+      <details><summary data-i18n="f1q"></summary><p data-i18n="f1a"></p></details>
+      <details><summary data-i18n="f2q"></summary><p data-i18n="f2a"></p></details>
+      <details><summary data-i18n="f3q"></summary><p data-i18n="f3a"></p></details>
+      <details><summary data-i18n="f4q"></summary><p data-i18n="f4a"></p></details>
     </div>
   </section>
+</main>
 
-  <!-- Signup -->
-  <section class="section" id="signup">
-    <div class="container">
-      <div class="cta reveal">
-        <div>
-          <h2>พร้อมเริ่มก้าวแรกหรือยัง?</h2>
-          <p>รับตาราง 4 สัปดาห์สำหรับมือใหม่ฟรี ส่งตรงถึงอีเมลของคุณ</p>
-        </div>
-        <form class="cta__form" id="signupForm" novalidate>
-          <input type="email" id="email" placeholder="อีเมลของคุณ" required>
-          <button type="submit" class="btn btn--light">รับตารางฟรี</button>
-          <p class="form-msg" id="formMsg" aria-live="polite"></p>
-        </form>
-      </div>
-    </div>
-  </section>
+<footer>
+  <div class="wrap">
+    <p data-i18n="disclaimer"></p>
+    <p>© 2026 FitStart AI</p>
+  </div>
+</footer>
 
-  <footer class="footer">
-    <div class="container footer__inner">
-      <a href="#" class="logo">Fit<span>Start</span></a>
-      <p>© <span id="year"></span> FitStart · ข้อมูลบนเว็บไซต์นี้เพื่อการศึกษา ไม่ใช่คำแนะนำทางการแพทย์</p>
-    </div>
-  </footer>
-
-  <button class="to-top" id="toTop" aria-label="กลับขึ้นด้านบน">↑</button>
-
-  <script src="script.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/planner.js"></script>
+<script src="js/tools.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
