@@ -3,7 +3,7 @@
 /* Stored on the user record (DEMO: this browser only):
    u.body = [{ h, w, at }]   newest first; one entry per day (saving again the same day replaces it) */
 
-const bodyLog = u => (u && Array.isArray(u.body) ? u.body : []);
+// Runs on profile.html only. bodyLog() lives in bmi.js.
 const sameDay = (a, b) => new Date(a).toDateString() === new Date(b).toDateString();
 
 function renderProfileBMI() {
@@ -16,6 +16,7 @@ let profileOf = null; // whose data is in the form right now
 function renderProfile() {
   const u = currentUser();
   $("#profile").hidden = !u;
+  $("#profileGate").hidden = !!u;
   if ((u && u.email) !== profileOf) { $("#bodyForm").reset(); $("#bodyErr").textContent = ""; profileOf = u && u.email; }
   if (!u) return;
   const t = T[lang], log = bodyLog(u);
@@ -92,8 +93,6 @@ $("#bodyForm").addEventListener("submit", e => {
   const entry = { h: +h.toFixed(1), w: +w.toFixed(1), at: Date.now() };
   if (u.body[0] && sameDay(u.body[0].at, entry.at)) u.body[0] = entry; else u.body.unshift(entry);
   setUsers(users);
-  // Keep the BMI tool in sync
-  $("#h").value = entry.h; $("#w").value = entry.w; renderBMI();
   renderProfile();
   toast(t.bodySaved);
 });
@@ -110,4 +109,4 @@ $("#histList").addEventListener("click", e => {
   }
 });
 
-$("#ddProfile").onclick = () => { $("#dropdown").hidden = true; };
+$("#gateLogin").onclick = () => openAuth("login");

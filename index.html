@@ -32,7 +32,7 @@
         </button>
         <div class="dropdown" id="dropdown" hidden>
           <div class="who" id="whoEmail"></div>
-          <a href="#profile" id="ddProfile" data-i18n="profileTitle"></a>
+          <a href="profile.html" id="ddProfile" data-i18n="profileTitle"></a>
           <a href="#myplans" id="ddPlans" data-i18n="myPlans"></a>
           <button type="button" id="logoutBtn" data-i18n="logout"></button>
         </div>
@@ -165,45 +165,6 @@
     </div>
   </section>
 
-  <!-- Profile (logged-in only) -->
-  <section id="profile" hidden>
-    <div class="wrap">
-      <div class="sec-head">
-        <h2 data-i18n="profileTitle"></h2>
-        <p data-i18n="profileSub"></p>
-      </div>
-      <div class="profile-grid">
-        <div class="panel tool">
-          <div class="profile-who">
-            <span class="avatar lg" id="pAvatar"></span>
-            <div><b id="pName"></b><small id="pEmail"></small></div>
-          </div>
-          <form id="bodyForm" novalidate>
-            <div class="field-row">
-              <div class="field">
-                <label for="pH" data-i18n="height"></label>
-                <input id="pH" type="number" inputmode="decimal" min="100" max="230" step="0.1" placeholder="165">
-              </div>
-              <div class="field">
-                <label for="pW" data-i18n="weight"></label>
-                <input id="pW" type="number" inputmode="decimal" min="25" max="250" step="0.1" placeholder="60">
-              </div>
-            </div>
-            <div class="bmi-out" id="pBmiOut" aria-live="polite"></div>
-            <div class="form-err" id="bodyErr" role="alert"></div>
-            <button type="submit" class="btn" data-i18n="saveBody"></button>
-          </form>
-        </div>
-        <div class="panel tool">
-          <h3 data-i18n="historyTitle"></h3>
-          <p data-i18n="historySub"></p>
-          <div id="trend"></div>
-          <div class="hist-list" id="histList"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- My plans (logged-in only) -->
   <section id="myplans" hidden>
     <div class="wrap">
@@ -296,10 +257,10 @@
 <script src="js/i18n.js"></script>
 <script src="js/data.js"></script>
 <script src="js/utils.js"></script>
+<script src="js/bmi.js"></script>
 <script src="js/planner.js"></script>
 <script src="js/tools.js"></script>
 <script src="js/auth.js"></script>
-<script src="js/profile.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

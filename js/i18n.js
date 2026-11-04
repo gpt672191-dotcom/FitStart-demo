@@ -89,6 +89,8 @@ const T = {
     errBody: "กรุณากรอกส่วนสูง 100–230 ซม. และน้ำหนัก 25–250 กก.",
     historyTitle: "ประวัติของฉัน", historySub: "บันทึกได้วันละ 1 รายการ ถ้าบันทึกซ้ำในวันเดียวกันจะแทนที่รายการเดิม",
     noHistory: "ยังไม่มีประวัติ กรอกน้ำหนักและส่วนสูงแล้วกดบันทึก",
+    backHome: "← กลับหน้าหลัก", gateTitle: "เข้าสู่ระบบเพื่อดูโปรไฟล์",
+    gateSub: "โปรไฟล์ใช้เก็บน้ำหนัก ส่วนสูง และ BMI ของคุณ เพื่อติดตามความเปลี่ยนแปลงและวางแผนต่อ",
     kg: "กก.", cm: "ซม.", trendLabel: "กราฟแนวโน้มน้ำหนัก",
     trendSum: (n, d) => `${n} รายการล่าสุด · เปลี่ยนแปลง ${d > 0 ? "+" : ""}${d} กก.`
   },
@@ -179,6 +181,8 @@ const T = {
     errBody: "Enter a height of 100–230 cm and a weight of 25–250 kg",
     historyTitle: "My history", historySub: "One entry per day. Saving again on the same day replaces it.",
     noHistory: "No history yet. Enter your weight and height, then save.",
+    backHome: "← Back to home", gateTitle: "Log in to see your profile",
+    gateSub: "Your profile keeps your weight, height and BMI so you can track changes and plan ahead.",
     kg: "kg", cm: "cm", trendLabel: "Weight trend chart",
     trendSum: (n, d) => `Last ${n} entries · change ${d > 0 ? "+" : ""}${d} kg`
   }

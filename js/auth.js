@@ -105,20 +105,21 @@ function renderAccount() {
   const u = currentUser();
   $("#loginBtn").hidden = !!u;
   $("#userMenu").hidden = !u;
-  $("#myplans").hidden = !u;
+  if ($("#myplans")) $("#myplans").hidden = !u;
   if (u) {
     $("#avatar").textContent = u.name.trim().charAt(0).toUpperCase() || "?";
     $("#uname").textContent = u.name;
     $("#whoEmail").textContent = u.email;
   }
   renderSaved();
-  if (typeof renderProfile === "function") renderProfile();
+  if (typeof renderProfile === "function") renderProfile();   // profile.html
+  if (typeof prefillBMI === "function") prefillBMI();         // index.html BMI tool
 }
 
 $("#loginBtn").onclick = () => openAuth("login");
 $("#logoutBtn").onclick = logout;
 $("#userBtn").onclick = e => { e.stopPropagation(); $("#dropdown").hidden = !$("#dropdown").hidden; };
-$("#ddPlans").onclick = () => { $("#dropdown").hidden = true; };
+$$(".dropdown a").forEach(a => a.onclick = () => { $("#dropdown").hidden = true; });
 document.addEventListener("click", e => { if (!e.target.closest(".user-menu")) $("#dropdown").hidden = true; });
 
 /* ---------- Saved plans ---------- */
@@ -138,6 +139,7 @@ function savePlan() {
 
 function renderSaved() {
   const box = $("#savedList"), u = currentUser(), t = T[lang];
+  if (!box) return; // not on this page
   if (!u) { box.innerHTML = ""; return; }
   if (!u.plans.length) { box.innerHTML = `<div class="empty">${t.noPlans}</div>`; return; }
   const dateFmt = new Intl.DateTimeFormat(lang === "th" ? "th-TH" : "en-GB", { dateStyle: "medium", timeStyle: "short" });
@@ -157,7 +159,7 @@ function renderSaved() {
   }).join("");
 }
 
-$("#savedList").addEventListener("click", e => {
+$("#savedList")?.addEventListener("click", e => {
   const t = T[lang];
   const openI = e.target.dataset.open, delI = e.target.dataset.del;
   const users = getUsers(), u = users[session];

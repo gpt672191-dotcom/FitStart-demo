@@ -269,6 +269,16 @@ footer { border-top: 1px solid var(--line); padding-block: 28px; color: var(--mu
 .saved .acts { display: flex; gap: 8px; }
 .empty { text-align: center; color: var(--muted); padding: 24px; background: var(--surface); border: 1px dashed var(--line); border-radius: 12px; }
 
+/* Profile page */
+.page { min-height: calc(100vh - 64px - 90px); }
+.page section { padding-block: 32px 56px; }
+.back-link { display: inline-block; color: var(--muted); text-decoration: none; font-size: .92rem; margin-bottom: 12px; }
+.back-link:hover { color: var(--accent); }
+.page-title { font-size: clamp(1.6rem, 4vw, 2.3rem); margin: 0 0 8px; }
+.gate { max-width: 520px; margin: 24px auto 0; text-align: center; }
+.gate-ico { font-size: 2.4rem; }
+.gate p { color: var(--muted); margin: 0 0 20px; }
+
 /* Profile */
 .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
 @media (max-width: 820px) { .profile-grid { grid-template-columns: 1fr; } }
