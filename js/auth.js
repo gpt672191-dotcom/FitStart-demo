@@ -1,7 +1,7 @@
 // ระบบสมาชิกแบบจำลอง และแผนที่บันทึกไว้ (Demo accounts and saved plans)
 
 /* ---------- Accounts (DEMO: stored in this browser only) ----------
-   fs-users:   { [email]: { name, email, salt, hash, created, plans: [{ answers, seed, savedAt }] } }
+   fs-users:   { [email]: { name, email, salt, hash, created, plans: [{ answers, seed, savedAt }], body: [{ h, w, at }] } }
    fs-session: email of the logged-in user                                                      */
 const getUsers = () => store.get("fs-users", {});
 const setUsers = u => store.set("fs-users", u);
@@ -112,6 +112,7 @@ function renderAccount() {
     $("#whoEmail").textContent = u.email;
   }
   renderSaved();
+  if (typeof renderProfile === "function") renderProfile();
 }
 
 $("#loginBtn").onclick = () => openAuth("login");

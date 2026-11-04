@@ -83,7 +83,14 @@ const T = {
     noPlans: "ยังไม่มีแผนที่บันทึก ลองสร้างแผนแล้วกด \"บันทึกแผน\"",
     savePlan: "💾 บันทึกแผน", savedMsg: "บันทึกแผนแล้ว ดูได้ที่ \"แผนของฉัน\"", alreadySaved: "แผนนี้บันทึกไว้แล้ว",
     loginToSave: "เข้าสู่ระบบเพื่อบันทึกแผน",
-    open: "เปิดดู", del: "ลบ", delConfirm: "กดอีกครั้งเพื่อลบ", deleted: "ลบแผนแล้ว", savedOn: "บันทึกเมื่อ"
+    open: "เปิดดู", del: "ลบ", delConfirm: "กดอีกครั้งเพื่อลบ", deleted: "ลบแผนแล้ว", savedOn: "บันทึกเมื่อ",
+    profileTitle: "โปรไฟล์ของฉัน", profileSub: "บันทึกน้ำหนักและส่วนสูง ระบบคำนวณ BMI ให้อัตโนมัติ และเก็บประวัติไว้ช่วยวางแผนในอนาคต",
+    saveBody: "💾 บันทึกข้อมูล", bodySaved: "บันทึกน้ำหนักและส่วนสูงแล้ว", bodyDeleted: "ลบรายการแล้ว",
+    errBody: "กรุณากรอกส่วนสูง 100–230 ซม. และน้ำหนัก 25–250 กก.",
+    historyTitle: "ประวัติของฉัน", historySub: "บันทึกได้วันละ 1 รายการ ถ้าบันทึกซ้ำในวันเดียวกันจะแทนที่รายการเดิม",
+    noHistory: "ยังไม่มีประวัติ กรอกน้ำหนักและส่วนสูงแล้วกดบันทึก",
+    kg: "กก.", cm: "ซม.", trendLabel: "กราฟแนวโน้มน้ำหนัก",
+    trendSum: (n, d) => `${n} รายการล่าสุด · เปลี่ยนแปลง ${d > 0 ? "+" : ""}${d} กก.`
   },
   en: {
     navHow: "How it works", navPlan: "Build plan", navTools: "Tools", navTips: "Tips",
@@ -166,6 +173,13 @@ const T = {
     noPlans: "No saved plans yet. Build a plan and press \"Save plan\".",
     savePlan: "💾 Save plan", savedMsg: "Plan saved. Find it under \"My plans\".", alreadySaved: "This plan is already saved",
     loginToSave: "Log in to save your plan",
-    open: "Open", del: "Delete", delConfirm: "Tap again to delete", deleted: "Plan deleted", savedOn: "Saved"
+    open: "Open", del: "Delete", delConfirm: "Tap again to delete", deleted: "Plan deleted", savedOn: "Saved",
+    profileTitle: "My profile", profileSub: "Log your weight and height. BMI is calculated automatically and your history is kept to help plan ahead.",
+    saveBody: "💾 Save", bodySaved: "Weight and height saved", bodyDeleted: "Entry deleted",
+    errBody: "Enter a height of 100–230 cm and a weight of 25–250 kg",
+    historyTitle: "My history", historySub: "One entry per day. Saving again on the same day replaces it.",
+    noHistory: "No history yet. Enter your weight and height, then save.",
+    kg: "kg", cm: "cm", trendLabel: "Weight trend chart",
+    trendSum: (n, d) => `Last ${n} entries · change ${d > 0 ? "+" : ""}${d} kg`
   }
 };

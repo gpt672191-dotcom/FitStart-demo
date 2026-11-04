@@ -1,17 +1,26 @@
 // เครื่องคำนวณ BMI และตัวจับเวลาพัก (BMI calculator and rest timer)
 
 /* ---------- BMI ---------- */
-function renderBMI() {
-  const t = T[lang], h = parseFloat($("#h").value), w = parseFloat($("#w").value), out = $("#bmiOut");
-  if (!(h >= 100 && h <= 230 && w >= 25 && w <= 250)) { out.innerHTML = `<span style="color:var(--muted)">${t.bmiEmpty}</span>`; return; }
+// Shared BMI calc (Asian cut-offs). Returns null when inputs are out of range.
+const validBody = (h, w) => h >= 100 && h <= 230 && w >= 25 && w <= 250;
+function bmiInfo(h, w) {
+  if (!validBody(h, w)) return null;
   const bmi = w / ((h / 100) ** 2);
   const idx = bmi < 18.5 ? 0 : bmi < 23 ? 1 : bmi < 25 ? 2 : 3;
   // Map BMI 14–34 onto the bar
   const pos = Math.min(100, Math.max(0, (bmi - 14) / 20 * 100));
-  out.innerHTML = `
-    <b>${bmi.toFixed(1)}</b> · ${t.bmiCat[idx]}
-    <div class="bmi-bar"><i style="left:${pos}%"></i></div>
-    <div style="color:var(--muted);font-size:.92rem">${t.bmiAdvice[idx]}</div>`;
+  return { bmi, idx, pos };
+}
+function bmiHTML(h, w) {
+  const t = T[lang], r = bmiInfo(h, w);
+  if (!r) return `<span style="color:var(--muted)">${t.bmiEmpty}</span>`;
+  return `
+    <b>${r.bmi.toFixed(1)}</b> · ${t.bmiCat[r.idx]}
+    <div class="bmi-bar"><i style="left:${r.pos}%"></i></div>
+    <div style="color:var(--muted);font-size:.92rem">${t.bmiAdvice[r.idx]}</div>`;
+}
+function renderBMI() {
+  $("#bmiOut").innerHTML = bmiHTML(parseFloat($("#h").value), parseFloat($("#w").value));
 }
 $("#h").addEventListener("input", renderBMI);
 $("#w").addEventListener("input", renderBMI);
