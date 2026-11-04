@@ -8,6 +8,23 @@ function prefillBMI() {
   renderBMI();
 }
 
+/* ---------- Theme: light / dark / auto (follows the device) ---------- */
+let theme = store.get("fs-theme", "auto");
+function applyTheme() {
+  const t = T[lang], root = document.documentElement;
+  if (theme === "light" || theme === "dark") root.dataset.theme = theme; else delete root.dataset.theme;
+  $("#themeSwitch").setAttribute("aria-label", t.themeLabel);
+  $$("#themeSwitch button").forEach(b => {
+    const opt = b.dataset.themeOpt, name = t[`theme${opt[0].toUpperCase()}${opt.slice(1)}`];
+    b.classList.toggle("on", opt === theme);
+    b.setAttribute("aria-pressed", opt === theme);
+    b.title = name; b.setAttribute("aria-label", name);
+  });
+}
+$$("#themeSwitch button").forEach(b => b.onclick = () => {
+  theme = b.dataset.themeOpt; store.set("fs-theme", theme); applyTheme();
+});
+
 /* ---------- Language ---------- */
 function applyLang() {
   const t = T[lang];
@@ -17,7 +34,7 @@ function applyLang() {
   $$(".lang button").forEach(b => b.classList.toggle("on", b.dataset.lang === lang));
   if ($("#planForm")) { renderChips(); renderPlan(); }
   if ($("#bmiOut")) { prefillBMI(); drawTimer(); }
-  renderAuth(); renderAccount();
+  renderAuth(); renderAccount(); applyTheme();
   if ($("#profileView")) document.title = isProfileRoute() ? `${t.profileTitle} · FitStart AI` : "FitStart AI";
 }
 $$(".lang button").forEach(b => b.onclick = () => { lang = b.dataset.lang; store.set("fs-lang", lang); applyLang(); });
