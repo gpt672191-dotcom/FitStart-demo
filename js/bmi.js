@@ -1,25 +1,41 @@
-// คำนวณ BMI ใช้ร่วมกันทุกหน้า (Shared BMI calc, Asian cut-offs)
+// หน้าคำนวณ BMI (BMI page) — ใช้เกณฑ์คนเอเชีย WHO Asia-Pacific
 
-const validBody = (h, w) => h >= 100 && h <= 230 && w >= 25 && w <= 250;
+const BMI_LINKS = ["muscle.html", "planner.html", "weight-loss.html", "weight-loss.html"];
 
-// Returns null when inputs are out of range.
-function bmiInfo(h, w) {
-  if (!validBody(h, w)) return null;
-  const bmi = w / ((h / 100) ** 2);
+function renderBMI() {
+  const tx = t(), h = num("h", 100, 230), w = num("w", 25, 250), out = $("#bmiOut");
+  if (isNaN(h) || isNaN(w)) { out.innerHTML = `<span style="color:var(--muted)">${tx.bmiEmpty}</span>`; return; }
+  const m = h / 100;
+  const bmi = w / (m * m);
   const idx = bmi < 18.5 ? 0 : bmi < 23 ? 1 : bmi < 25 ? 2 : 3;
   // Map BMI 14–34 onto the bar
   const pos = Math.min(100, Math.max(0, (bmi - 14) / 20 * 100));
-  return { bmi, idx, pos };
+  const lo = (18.5 * m * m).toFixed(1), hi = (22.9 * m * m).toFixed(1);
+  out.innerHTML = `
+    <b>${bmi.toFixed(1)}</b> · ${tx.bmiCat[idx]}
+    <div class="bmi-bar"><i style="left:${pos}%"></i></div>
+    <div style="color:var(--muted);font-size:.92rem">${tx.bmiAdvice[idx]}</div>
+    <p style="margin:10px 0 0;font-size:.92rem">${tx.idealRange(lo, hi)}</p>
+    <p style="margin:10px 0 0"><a href="${BMI_LINKS[idx]}" style="color:var(--accent);font-weight:600;text-decoration:none">${tx.bmiLink[idx]}</a></p>`;
 }
 
-function bmiHTML(h, w) {
-  const t = T[lang], r = bmiInfo(h, w);
-  if (!r) return `<span style="color:var(--muted)">${t.bmiEmpty}</span>`;
-  return `
-    <b>${r.bmi.toFixed(1)}</b> · ${t.bmiCat[r.idx]}
-    <div class="bmi-bar"><i style="left:${r.pos}%"></i></div>
-    <div style="color:var(--muted);font-size:.92rem">${t.bmiAdvice[r.idx]}</div>`;
+function renderBmiTable() {
+  const tx = t();
+  const rows = [
+    ["#60a5fa", "< 18.5"], ["#22c55e", "18.5 – 22.9"], ["#f59e0b", "23 – 24.9"], ["#ef4444", "≥ 25"]
+  ];
+  $("#bmiTable").innerHTML = rows.map(([c, r], i) =>
+    `<tr><td><span class="dot" style="background:${c}"></span>${tx.bmiCat[i]}</td><td style="text-align:right">${r}</td></tr>`
+  ).join("");
 }
 
-// Body log saved on the user record: [{ h, w, at }], newest first
-const bodyLog = u => (u && Array.isArray(u.body) ? u.body : []);
+// Prefill from the logged-in user's profile, if any
+{
+  const u = currentUser();
+  if (u && hasBody(u.profile)) { $("#h").value = u.profile.height; $("#w").value = u.profile.weight; }
+}
+
+$("#h").addEventListener("input", renderBMI);
+$("#w").addEventListener("input", renderBMI);
+onRender(renderBMI);
+onRender(renderBmiTable);

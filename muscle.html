@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สร้างกล้าม · FitStart AI</title>
+<link rel="icon" href="img/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=202611041937">
+</head>
+<body data-page="muscle">
+
+<main>
+  <div class="wrap page-hero has-fig">
+    <div>
+      <span class="pill"><span data-i18n="mPill"></span></span>
+      <h1 data-i18n="mTitle"></h1>
+      <p class="lead" data-i18n="mLead"></p>
+    </div>
+    <div class="fig hero-fig" data-fig="curl"></div>
+  </div>
+
+  <!-- Muscle groups: pick one, see its exercises (js/muscle-groups.js) -->
+  <section class="tight" id="groups">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 data-i18n="mgTitle"></h2>
+        <p data-i18n="mgSub"></p>
+      </div>
+      <div class="mg-grid" id="mgGrid"></div>
+    </div>
+  </section>
+
+  <section class="tight" id="mgDetail"></section>
+
+  <!-- Principles -->
+  <section class="tight">
+    <div class="wrap">
+      <div class="sec-head"><h2 data-i18n="prinTitle"></h2></div>
+      <div class="cards">
+        <div class="tip"><div class="fig" data-fig="dbpress"></div><h3 data-i18n="mp1t"></h3><p data-i18n="mp1d"></p></div>
+        <div class="tip"><div class="fig" data-fig="curl"></div><h3 data-i18n="mp2t"></h3><p data-i18n="mp2d"></p></div>
+        <div class="tip"><div class="fig" data-fig="squat"></div><h3 data-i18n="mp3t"></h3><p data-i18n="mp3d"></p></div>
+        <div class="tip"><div class="fig" data-fig="sleep"></div><h3 data-i18n="mp4t"></h3><p data-i18n="mp4d"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Protein calculator -->
+  <section class="tight">
+    <div class="wrap">
+      <div class="panel">
+        <h2 style="margin:0 0 4px;font-size:1.3rem" data-i18n="protTitle"></h2>
+        <p style="margin:0 0 16px;color:var(--muted)" data-i18n="protSub"></p>
+        <div class="calc-grid">
+          <div class="field">
+            <label for="pw" data-i18n="weight"></label>
+            <input id="pw" type="number" inputmode="decimal" min="25" max="250" placeholder="60">
+          </div>
+        </div>
+        <div id="protOut"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tight">
+    <div class="wrap">
+      <div class="cta">
+        <div><h2 data-i18n="mCta"></h2><p data-i18n="mCtaSub"></p></div>
+        <a href="planner.html?goal=muscle" class="btn" data-i18n="mCtaBtn"></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="js/i18n.js"></script>
+<script src="js/data.js?v=202611041937"></script>
+<script src="js/utils.js?v=202611041937"></script>
+<script src="js/icons.js?v=202611041937"></script>
+<script src="js/figures.js?v=202611041937"></script>
+<script src="js/layout.js?v=202611041937"></script>
+<script src="js/auth.js?v=202611041937"></script>
+<script src="js/bodymap.js?v=202611041937"></script>
+<script src="js/muscle-groups.js?v=202611041937"></script>
+<script src="js/calculators.js?v=202611041937"></script>
+<script src="js/main.js?v=202611041937"></script>
+</body>
+</html>

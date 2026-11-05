@@ -1,4 +1,15 @@
-// สร้างแผนออกกำลังกาย (Plan generator and form)
+// หน้าสร้างแผน: สร้างแผน ฟอร์มคำถาม และแผนที่บันทึกไว้ (Plan builder page)
+
+let answers = { ...DEFAULTS, ...store.get("fs-answers", {}) };
+let lastPlan = store.get("fs-plan", null); // { answers, seed }
+
+// Links like planner.html?goal=muscle&impact=low pre-select answers
+{
+  const q = new URLSearchParams(location.search);
+  for (const key of Object.keys(OPTIONS)) {
+    if (OPTIONS[key].includes(q.get(key))) answers[key] = q.get(key);
+  }
+}
 
 /* ---------- Plan generation ---------- */
 function allowedEquip(eq) { return eq === "gym" ? ["none", "db", "gym"] : eq === "db" ? ["none", "db"] : ["none"]; }
@@ -18,11 +29,7 @@ function dose(ex, a) {
   return `${sets} × ${reps}${side}`;
 }
 
-function restText(a) {
-  const t = T[lang];
-  const s = a.goal === "muscle" ? 90 : a.goal === "flex" ? 15 : a.goal === "lose" ? 30 : 45;
-  return `${t.rest} ${s}${t.sec}`;
-}
+const restSec = a => (a.goal === "muscle" ? 90 : a.goal === "flex" ? 15 : a.goal === "lose" ? 30 : 45);
 
 function buildPlan(a, seed) {
   const rand = rng(seed);
@@ -68,36 +75,62 @@ function renderPlan() {
   const total = +a.time;
 
   const summary = t.sumTpl(t.sumGoal[a.goal], t.lvName[a.level], a.days, a.time, t.sumFocus[a.goal]);
-  const week = t.week.map((d, i) => `<div class="wd ${active.has(i) ? "on" : ""}">${d}</div>`).join("");
-  const cards = days.map(d => `
-    <article class="day">
-      <div class="day-head">
-        <h3>${t.weekFull[d.weekday]} · ${t.dayType[d.type]}</h3>
-        <small>~${total} ${t.min} · ${restText(a)}</small>
+  const byDay = Object.fromEntries(days.map(d => [d.weekday, d]));
+
+  // Week strip: training days show the day type, the rest say "rest"
+  const week = t.week.map((d, i) => `
+    <div class="wk ${active.has(i) ? "on" : ""}">
+      <b>${d}</b><small>${active.has(i) ? t.dayType[byDay[i].type] : t.restDay}</small>
+    </div>`).join("");
+
+  const stats = [
+    [a.days, t.stDays], [a.time, t.stMin], [`${restSec(a)}${t.sec}`, t.stRest], [t.lvName[a.level], t.stLevel]
+  ].map(([v, l]) => `<div class="pstat"><b>${v}</b><small>${l}</small></div>`).join("");
+
+  const ticks = `<span class="ticks print-only" aria-hidden="true"><i></i><i></i><i></i><i></i></span>`;
+
+  const cards = days.map((d, n) => `
+    <article class="pday">
+      <div class="pday-head">
+        <span class="pday-num">${n + 1}</span>
+        <div class="pday-title"><h3>${t.weekFull[d.weekday]}</h3><span>${t.dayType[d.type]}</span></div>
+        <span class="pday-meta">~${total} ${t.min}</span>
       </div>
-      <div class="phase">${t.warm}</div>
-      <div class="phase-line">${t.warmTxt}</div>
-      <div class="phase">${t.main}</div>
-      <ol>
-        ${d.list.map(ex => `
-          <li>
-            <div class="ex-top"><span class="ex-name">${ex[lang]}</span><span class="ex-dose">${dose(ex, a)}</span></div>
-            <div class="ex-cue">${lang === "th" ? ex.cth : ex.cen}</div>
+      <div class="phase-row"><span class="phase-tag">${t.warm}</span><span>${t.warmTxt}</span></div>
+      <ol class="pex-list">
+        ${d.list.map((ex, k) => `
+          <li class="pex">
+            <div class="fig mini" data-fig="${ex.id}"></div>
+            <div class="pex-body">
+              <div class="pex-name"><span class="pex-n">${k + 1}</span>${ex[lang]}</div>
+              <div class="pex-cue">${lang === "th" ? ex.cth : ex.cen}</div>
+              <span class="pex-dose">${dose(ex, a)}</span>
+            </div>
+            ${ticks}
           </li>`).join("")}
       </ol>
-      <div class="phase">${t.cool}</div>
-      <div class="phase-line" style="padding-bottom:14px">${t.coolTxt}</div>
+      <div class="phase-row"><span class="phase-tag">${t.cool}</span><span>${t.coolTxt}</span></div>
     </article>`).join("");
 
+  const u = typeof currentUser === "function" ? currentUser() : null;
+  const dateFmt = new Intl.DateTimeFormat(lang === "th" ? "th-TH" : "en-GB", { dateStyle: "long" });
+
   box.innerHTML = `
+    <div class="print-head print-only">
+      <img src="img/logo.svg" alt="" width="40" height="40">
+      <div><b>${t.printTitle}</b><small>FitStart AI${u ? ` · ${esc(u.name)}` : ""} · ${dateFmt.format(new Date())}</small></div>
+    </div>
     <div class="summary"><span class="ai-badge">AI</span><p>${summary}</p></div>
-    <div class="week">${week}</div>
-    <div class="days">${cards}</div>
-    <p class="note">⚠️ ${t.planNote}</p>
+    <div class="pstats">${stats}</div>
+    <div class="week2">${week}</div>
+    <p class="tick-note print-only">${t.tickNote}</p>
+    <div class="pdays">${cards}</div>
+    <p class="note">${icon("alert")} ${t.planNote}</p>
+    <p class="print-foot print-only">${t.printFoot}</p>
     <div class="plan-actions">
-      <button type="button" class="btn" id="saveBtn">${t.savePlan}</button>
-      <button type="button" class="btn ghost" id="regen">${t.regen}</button>
-      <button type="button" class="btn ghost" id="printBtn">${t.print}</button>
+      <button type="button" class="btn" id="saveBtn">${icon("save")}${t.savePlan}</button>
+      <button type="button" class="btn ghost" id="regen">${icon("refresh")}${t.regen}</button>
+      <button type="button" class="btn ghost" id="printBtn">${icon("printer")}${t.print}</button>
     </div>`;
   $("#saveBtn").onclick = savePlan;
   $("#regen").onclick = () => generate({ ...lastPlan.answers }, false);
@@ -130,3 +163,67 @@ $("#planForm").addEventListener("change", e => {
   if (e.target.name) { answers[e.target.name] = e.target.value; store.set("fs-answers", answers); }
 });
 $("#planForm").addEventListener("submit", e => { e.preventDefault(); generate({ ...answers }); });
+onRender(renderChips);
+onRender(renderPlan);
+
+/* ---------- Saved plans (needs auth.js) ---------- */
+function savePlan() {
+  const tx = t();
+  if (!lastPlan) return;
+  if (!currentUser()) { toast(tx.loginToSave); openAuth("login", savePlan); return; }
+  const users = getUsers(), u = users[session];
+  if (u.plans.some(p => p.seed === lastPlan.seed && JSON.stringify(p.answers) === JSON.stringify(lastPlan.answers))) {
+    toast(tx.alreadySaved); return;
+  }
+  u.plans.unshift({ answers: lastPlan.answers, seed: lastPlan.seed, savedAt: Date.now() });
+  setUsers(users);
+  renderSaved();
+  toast(tx.savedMsg);
+}
+
+function renderSaved() {
+  const box = $("#savedList"), u = currentUser(), tx = t();
+  $("#myplans").hidden = !u;
+  if (!u) { box.innerHTML = ""; return; }
+  if (!u.plans.length) { box.innerHTML = `<div class="empty">${tx.noPlans}</div>`; return; }
+  const dateFmt = new Intl.DateTimeFormat(lang === "th" ? "th-TH" : "en-GB", { dateStyle: "medium", timeStyle: "short" });
+  box.innerHTML = u.plans.map((p, i) => {
+    const a = p.answers;
+    return `
+      <div class="saved">
+        <div>
+          <b>${tx.sumGoal[a.goal].replace(/^./, c => c.toUpperCase())} · ${tx.lvName[a.level]}</b>
+          <small>${a.days} × ${a.time} ${tx.min} · ${tx[`equip_${a.equip}`]} · ${tx.savedOn} ${dateFmt.format(p.savedAt)}</small>
+        </div>
+        <div class="acts">
+          <button type="button" class="btn sm" data-open="${i}">${tx.open}</button>
+          <button type="button" class="btn sm ghost" data-del="${i}">${tx.del}</button>
+        </div>
+      </div>`;
+  }).join("");
+}
+onRender(renderSaved);
+
+$("#savedList").addEventListener("click", e => {
+  const tx = t();
+  const openI = e.target.dataset.open, delI = e.target.dataset.del;
+  const users = getUsers(), u = users[session];
+  if (!u) return;
+  if (openI !== undefined) {
+    const p = u.plans[+openI];
+    lastPlan = { answers: p.answers, seed: p.seed };
+    answers = { ...p.answers };
+    store.set("fs-plan", lastPlan); store.set("fs-answers", answers);
+    renderChips(); renderPlan();
+    $("#plan").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  if (delI !== undefined) {
+    // Two-step delete: first tap arms the button, second tap deletes
+    if (e.target.dataset.armed) {
+      u.plans.splice(+delI, 1); setUsers(users); renderSaved(); toast(tx.deleted);
+    } else {
+      e.target.dataset.armed = "1"; e.target.textContent = tx.delConfirm;
+      setTimeout(() => { if (e.target.isConnected) { delete e.target.dataset.armed; e.target.textContent = tx.del; } }, 3000);
+    }
+  }
+});

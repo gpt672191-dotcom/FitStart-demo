@@ -1,20 +1,11 @@
-// เครื่องคำนวณ BMI และตัวจับเวลาพัก (BMI calculator and rest timer)
+// ตัวจับเวลาพักระหว่างเซ็ต (Rest timer)
 
-/* ---------- BMI ---------- */
-// bmiInfo / bmiHTML live in bmi.js
-function renderBMI() {
-  $("#bmiOut").innerHTML = bmiHTML(parseFloat($("#h").value), parseFloat($("#w").value));
-}
-$("#h").addEventListener("input", renderBMI);
-$("#w").addEventListener("input", renderBMI);
-
-/* ---------- Rest timer ---------- */
 let tTotal = 60, tLeft = 60, tId = null, tEnd = 0;
 function fmt(s) { return `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`; }
 function drawTimer() {
   $("#tDisplay").textContent = fmt(Math.ceil(tLeft));
   $("#tBar").style.width = `${(tLeft / tTotal) * 100}%`;
-  $("#tStart").textContent = tId ? T[lang].pause : T[lang].start;
+  $("#tStart").textContent = tId ? t().pause : t().start;
 }
 function beep() {
   try {
@@ -45,3 +36,4 @@ $("#presets").addEventListener("click", e => {
   const s = e.target.dataset.sec; if (!s) return;
   stopTimer(); tTotal = tLeft = +s; drawTimer();
 });
+onRender(drawTimer);

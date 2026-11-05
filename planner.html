@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สร้างแผน · FitStart AI</title>
+<link rel="icon" href="img/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=202611041937">
+</head>
+<body data-page="plan">
+
+<main>
+  <div class="wrap page-hero has-fig">
+    <div>
+      <span class="pill"><span data-i18n="planPill"></span></span>
+      <h1 data-i18n="planTitle"></h1>
+      <p class="lead" data-i18n="planSub"></p>
+    </div>
+    <div class="fig hero-fig" data-fig="burpee"></div>
+  </div>
+
+  <section class="tight">
+    <div class="wrap">
+      <div class="panel">
+        <form id="planForm">
+          <div class="form-grid">
+            <div class="q">
+              <div class="q-label" data-i18n="qGoal"></div>
+              <div class="chips" data-group="goal"></div>
+            </div>
+            <div class="q">
+              <div class="q-label" data-i18n="qLevel"></div>
+              <div class="chips" data-group="level"></div>
+            </div>
+            <div class="q">
+              <div class="q-label" data-i18n="qDays"></div>
+              <div class="chips" data-group="days"></div>
+            </div>
+            <div class="q">
+              <div class="q-label" data-i18n="qTime"></div>
+              <div class="chips" data-group="time"></div>
+            </div>
+            <div class="q">
+              <div class="q-label" data-i18n="qEquip"></div>
+              <div class="chips" data-group="equip"></div>
+            </div>
+            <div class="q">
+              <div class="q-label" data-i18n="qImpact"></div>
+              <div class="chips" data-group="impact"></div>
+            </div>
+          </div>
+          <button type="submit" class="btn"><i data-icon="sparkle"></i><span data-i18n="generate"></span></button>
+        </form>
+        <div id="plan" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- My plans (logged-in only) -->
+  <section id="myplans" hidden>
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 data-i18n="myPlans"></h2>
+        <p data-i18n="myPlansSub"></p>
+      </div>
+      <div class="saved-list" id="savedList"></div>
+    </div>
+  </section>
+</main>
+
+<script src="js/i18n.js"></script>
+<script src="js/data.js?v=202611041937"></script>
+<script src="js/utils.js?v=202611041937"></script>
+<script src="js/icons.js?v=202611041937"></script>
+<script src="js/figures.js?v=202611041937"></script>
+<script src="js/layout.js?v=202611041937"></script>
+<script src="js/auth.js?v=202611041937"></script>
+<script src="js/planner.js?v=202611041937"></script>
+<script src="js/main.js?v=202611041937"></script>
+</body>
+</html>
